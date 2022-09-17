@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -25,7 +26,7 @@ namespace DeskmanCS
             }
             string[] DelimitedStrings = string_CommandTextBox.Split('{', '}');
 
-
+            // Get Param List
             int bracketCounter = 0;
 
             List<string> paramStrings = new List<string>();
@@ -41,8 +42,22 @@ namespace DeskmanCS
                 }
             }
             TestLabel.Text = sb.ToString().Replace(Environment.NewLine, "<br />");
+
+            DataTable GridViewDt = GetDataTable(paramStrings);
+
+            PV_Table.DataSource = GridViewDt;
+            PV_Table.DataBind();
         }
-        static Boolean CustomeBalancedParenthesis(string exp)
+        protected DataTable GetDataTable(List<string> paramStrings) {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Col1",typeof(String));
+
+            foreach (string s in paramStrings) {
+                dt.Rows.Add(s);
+            }
+            return dt;
+        }
+        protected Boolean CustomeBalancedParenthesis(string exp)
         {
             // Declare an empty character stack */
             Stack<char> st = new Stack<char>();
@@ -92,7 +107,7 @@ namespace DeskmanCS
                 return false;
             }
         }
-        static Boolean isMatchingPair(char character1,
+        protected Boolean isMatchingPair(char character1,
                                  char character2)
         {
             if (character1 == '(' && character2 == ')')

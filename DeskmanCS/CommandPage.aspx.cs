@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+
 namespace DeskmanCS
 {
     public partial class CommandPage : System.Web.UI.Page
@@ -107,19 +108,69 @@ namespace DeskmanCS
                 return false;
             }
         }
-        protected Boolean isMatchingPair(char character1,
-                                 char character2)
+        protected Boolean isMatchingPair(char character1,char character2)
         {
-            if (character1 == '(' && character2 == ')')
+            
+            if (character1 == '{' && character2 == '}')
                 return true;
-            else if (character1 == '{' && character2 == '}')
-                return true;
-            else if (character1 == '[' && character2 == ']')
+            //else if (character1 == '(' && character2 == ')')
+            //    return true;
+            //else if (character1 == '[' && character2 == ']')
+            //    return true;
+            else if (character1 == '<' && character2 == '>')
                 return true;
             else
                 return false;
         }
 
+        protected void ConvertButton_Click(object sender, EventArgs e)
+        {
+            StringBuilder stb = new StringBuilder();
+            string a = "";
+            string b = "";
 
+            Dictionary<string, string> myDictionary = new Dictionary<string, string>();
+
+            foreach (GridViewRow row in PV_Table.Rows)
+            {
+                int tvar = 0;
+                for (int k = 1; k < row.Cells.Count; k++)
+                {
+                    if (tvar < 1)
+                    {
+                        tvar++;
+                        continue;
+                    }
+                    a = row.Cells[k].Text;
+                    TextBox t = (TextBox)row.Cells[k].FindControl("TextBox1");
+                    b = t.Text;
+
+                    stb.AppendLine("a is " + a);
+                    stb.AppendLine("b is " + b);
+
+                    myDictionary.Add(a, b);
+                }
+            }
+            TestLabel.Text = stb.ToString().Replace(Environment.NewLine, "<br />");
+
+
+            string firstText = CommandTextBox.Text;
+            foreach (KeyValuePair<string, string> entry in myDictionary)
+            {
+                // find key Enter value
+                string key= entry.Key;
+                string value= entry.Value;
+
+                int indexS = firstText.IndexOf(key);
+
+                int initial = indexS - 1;
+                int final = initial + 1 + key.Length + 1;
+
+
+                firstText = firstText.Insert(final, value).Remove(initial, final - initial);
+            }
+            ResultTextBox.Text = firstText;
+        }
+        
     }
 }

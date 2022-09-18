@@ -13,6 +13,22 @@
             width: 1016px;
         }
     </style>
+   <script type="text/javascript">
+       function myFunction() {
+           // Get the text field
+           var copyText = document.getElementById("ResultTextBox");
+
+           // Select the text field
+           copyText.select();
+           //copyText.setSelectionRange(0, 99999); // For mobile devices
+
+           // Copy the text inside the text field
+           navigator.clipboard.writeText(copyText.value);
+
+           // Alert the copied text
+           //alert("Copied the text: " + copyText.value);
+       }
+   </script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -46,6 +62,12 @@
     </asp:TemplateField>                      
     </Columns>
         </asp:GridView>
+        <asp:Button ID="ConvertButton" runat="server" OnClick="ConvertButton_Click" Text="Convert" />
+        <br />
+        <br />
+        <asp:TextBox ID="ResultTextBox" runat="server" Width="1111px"></asp:TextBox>
+    &nbsp;&nbsp;
+        <button onclick="myFunction()">Copy text</button>
     </form>
    
     
